@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thyemleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>个人信息修改</title>
+  <link rel="stylesheet" th:href="@{layui/css/layui.css}" media="all">
+  <link rel="stylesheet" th:href="@{admin/style.css}" media="all">
+</head>
+<body>
+<div class="login-main">
+  <header class="layui-elip">个人信息修改</header>
+  <form class="layui-form">
+    <div class="layui-input-inline">
+      <input type="text" name="login_name" required lay-verify="required" placeholder="账号" class="layui-input" >
+    </div>
+    <div class="layui-input-inline">
+      <input type="text" name="user_name" required lay-verify="required" placeholder="用户名" class="layui-input" >
+    </div>
+    <div class="layui-input-inline">
+      <input type="text" name="phone_number" required lay-verify="required" placeholder="手机号" class="layui-input" >
+    </div>
+    <div class="layui-input-inline">
+      <input type="text" name="email" required lay-verify="required" placeholder="邮箱" class="layui-input" >
+    </div>
+    <div class="layui-input-inline login-btn">
+      <button lay-submit lay-filter="register" class="layui-btn">修改</button>
+    </div>
+  </form>
+</div>
+<script th:src="@{layui/layui.js}"></script>
+<script>
+  layui.use("form",function (){
+    var form= layui.form;
+    var $= layui.$;
+    //监听提交
+    form.on("submit(register)",function (data){
+      $.ajax({
+        url:"/changeUserProfile",
+        type:"POST",
+        data:data.field,
+        dataType:"json",
+        success:function(result){
+          if(result.code=="0"){
+            layer.msg(result.msg,{icon:result.icon,anim:result.anim},function (){
+              // window.location.href = "/login";
+            });
+          }else{
+            layer.msg(result.msg,{icon:result.icon,anim:result.anim});
+          }
+        }
+      });
+      return false;
+    });
+  });
+</script>
+</body>
+</html>

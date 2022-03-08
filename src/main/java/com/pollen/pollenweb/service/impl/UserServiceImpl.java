@@ -24,14 +24,14 @@ public  class UserServiceImpl extends ServiceImpl<UserMapper, User> implements I
     @Override
     public User queryUserByUsername(User user) {
         QueryWrapper<User> wrapper=new QueryWrapper<>();
-        wrapper.eq("user_name",user.getUser_name());
+        wrapper.eq("username",user.getUsername());
         return userMapper.selectOne(wrapper);
     }
 
     @Override
     public User queryUserByLoginname(User user) {
         QueryWrapper<User> wrapper=new QueryWrapper<>();
-        wrapper.eq("login_name",user.getLogin_name());
+        wrapper.eq("loginname",user.getLoginname());
         return userMapper.selectOne(wrapper);
     }
 
@@ -42,7 +42,7 @@ public  class UserServiceImpl extends ServiceImpl<UserMapper, User> implements I
             return 2;
         }else{
             //插入前走加密流程
-            String md5password = MD5Util.SysMd5(user.getUser_name(),user.getPassword());
+            String md5password = MD5Util.SysMd5(user.getLoginname(),user.getPassword());
             user.setPassword(md5password);
             //插入db
             return userMapper.insert(user);

@@ -21,16 +21,16 @@ public class User implements  Serializable{
     private Integer id;
 
     //账号
-    private String login_name;
+    private String loginname;
 
     //用户名
-    private String user_name;
+    private String username;
 
     //密码
     private String password;
 
     //手机号
-    private String phone_number;
+    private String phonenumber;
 
     //邮箱
     private String email;
@@ -39,7 +39,7 @@ public class User implements  Serializable{
     private String note;
 
     //文件名
-    private String file_name;
+    private String filename;
 
     //创建时间
     private Date created_time;

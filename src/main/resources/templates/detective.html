@@ -6,29 +6,31 @@
 -->
 
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thyemleaf.org">
 <html>
-
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-    <meta charset="UTF-8">
+
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>INSPINIA | Dashboard</title>
-<!--    <link rel="stylesheet" th:herf="@{/Bootstrap/css/bootstrap.min.css}" href="../static/Bootstrap/css/bootstrap.min.css" >-->
-<!--    <link href="../static/Bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet" th:herf="@{/Bootstrap/font-awesome/css/font-awesome.css}">-->
-<!--    <link href="../static/Bootstrap/css/plugins/dataTables/datatables.min.css" rel="stylesheet" th:herf="@{/Bootstrap/css/plugins/dataTables/datatables.min.css}">-->
-<!--    &lt;!&ndash; Toastr style &ndash;&gt;-->
-<!--    <link href="../static/Bootstrap/css/plugins/toastr/toastr.min.css" rel="stylesheet" th:herf="@{/Bootstrap/css/plugins/toastr/toastr.min.css}">-->
 
-<!--    &lt;!&ndash; Gritter &ndash;&gt;-->
-<!--    <link href="../static/Bootstrap/js/plugins/gritter/jquery.gritter.css" rel="stylesheet" th:herf="@{/Bootstrap/js/plugins/gritter/jquery.gritter.css}">-->
-<!--    <link href="../static/Bootstrap/css/plugins/select2/select2.min.css" rel="stylesheet" th:herf="@{/Bootstrap/css/plugins/select2/select2.min.css}">-->
-<!--    <link href="../static/Bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet" th:herf="@{/Bootstrap/css/plugins/iCheck/custom.css}">-->
-<!--    <link href="../static/Bootstrap/css/animate.css" rel="stylesheet" th:herf="@{/Bootstrap/css/animate.css}">-->
-    <link rel="stylesheet" th:herf="@{/layui/css/style.css}" href="../static/layui/css/style.css"/>
-<!--    <link href="../static/Bootstrap/css/plugins/datapicker/datepicker3.css" rel="stylesheet" th:herf="@{/Bootstrap/css/plugins/datapicker/datepicker3.css}">-->
 
-    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../static/layui/css/layui.css"/>
+    <link href="../static/Bootstrap/css/bootstrap.min.css" rel="stylesheet" th:herf="@{Bootstrap/css/bootstrap.min.css}">
+    <link href="../static/Bootstrap/font-awesome/css/font-awesome.css" rel="stylesheet" th:herf="@{Bootstrap/font-awesome/css/font-awesome.css}">
+    <link href="../static/Bootstrap/css/plugins/dataTables/datatables.min.css" rel="stylesheet" th:herf="@{Bootstrap/css/plugins/dataTables/datatables.min.css}">
+    <!-- Toastr style -->
+    <link href="../static/Bootstrap/css/plugins/toastr/toastr.min.css" rel="stylesheet" th:herf="@{Bootstrap/css/plugins/toastr/toastr.min.css}">
+
+    <!-- Gritter -->
+    <link href="../static/Bootstrap/js/plugins/gritter/jquery.gritter.css" rel="stylesheet" th:herf="@{Bootstrap/js/plugins/gritter/jquery.gritter.css}">
+    <link href="../static/Bootstrap/css/plugins/select2/select2.min.css" rel="stylesheet" th:herf="@{Bootstrap/css/plugins/select2/select2.min.css}">
+    <link href="../static/Bootstrap/css/plugins/iCheck/custom.css" rel="stylesheet" th:herf="@{Bootstrap/css/plugins/iCheck/custom.css}">
+    <link href="../static/Bootstrap/css/animate.css" rel="stylesheet" th:herf="@{Bootstrap/css/animate.css}">
+    <link href="../static/Bootstrap/css/style.css" rel="stylesheet" th:herf="@{Bootstrap/css/style.css}">
+    <link href="../static/Bootstrap/css/plugins/datapicker/datepicker3.css" rel="stylesheet" th:herf="@{Bootstrap/css/plugins/datapicker/datepicker3.css}">
+
 
 </head>
 
@@ -52,13 +54,19 @@
                     </div>
                 </li>
                 <li >
-                    <a href="/demo"><i class="fa fa-th-large"></i> <span class="nav-label">首页</span></a>
+                    <a href="/detective"><i class="fa fa-th-large"></i> <span class="nav-label">首页</span></a>
                 </li>
                 <li>
-                    <a href="/upload"><i class="fa fa-upload"></i> <span class="nav-label">花粉上传</span></a>
+                    <a href="/detective"><i class="fa fa-upload"></i> <span class="nav-label">花粉上传</span></a>
                 </li>
                 <li>
                     <a href="/detective"><i class="fa fa-leaf"></i> <span class="nav-label">花粉检测</span></a>
+                </li>
+                <li>
+                    <a href="/history"><i class="fa fa-paperclip"></i> <span class="nav-label">历史记录</span></a>
+                </li>
+                <li>
+                    <a href="/changeProfile"><i class="fa fa-address-book"></i> <span class="nav-label">用户中心</span></a>
                 </li>
 
             </ul>
@@ -176,13 +184,17 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="../login">登录</a>
+                    <li shiro:notAuthenticated>
+                        <a href="../login" >登录</a>
                     </li>
-                    <li>
+                    <li shiro:authenticated>
+                        <a href="../userPage">已登录</a>
+                        <a shiro:principal></a>
+                    </li>
+                    <li shiro:notAuthenticated>
                         <a href="../register">注册</a>
                     </li>
-                    <li>
+                    <li shiro:authenticated>
                         <a href="../logout"><i class="fa fa-sign-out"></i>注销</a>
                     </li>
                     <!--                <li>-->
@@ -436,58 +448,58 @@
 
 
 
-<script>
+<script >
     // function checkLeave(){
     //     event.returnValue="确定离开当前页面吗？";
     // }
 
-    // $(document).ready(function() {
-    //
-    //     $('.dataTables-example').DataTable({
-    //         language:{
-    //             "url":"/static/Bootstrap/js/datatables_language.json"
-    //         },
-    //         'length':6,
-    //         'processing': true,
-    //         'responsive': true,
-    //         'ajax': {
-    //             'url': '/ndpiQueryPage',
-    //             'type': 'POST',
-    //         },
-    //         'columns': [
-    //             {'data': null, 'orderable': false},
-    //             {'data': 'fileid', 'width':40},
-    //             {'data': 'filename'},
-    //             {'data': 'uploadtime'},
-    //             {'data': 'filesize'},
-    //             {'data': 'state'},
-    //         ],
-    //         'columnDefs': [{
-    //             targets: 0,
-    //             render: function (data, type, row, meta) {
-    //                 //每一行第一列都是复选框, 复选框要有name属性 方便查找
-    //                 //并且要加一个onclick 事件, 保证单选的时候也检查表头复选框状态.
-    //                 // return '<input type="checkbox" name="checklist" onclick="dd(this)" value="' + row.id + '" />'
-    //                 // return '<input type="radio" name="radio"  value="' + row.id + '" />'
-    //                 return '<div class="i-checks"><label> <input type="radio" value="' + row.id + '" name="radio"> <i></i> </label></div>'
-    //             }
-    //         }],
-    //         // cols: [
-    //         //     [
-    //         //
-    //         //         {title: '序号',field:'id',width: 60,align:'center'},
-    //         //         {field:'filename',title:'文件名称',algin:'center',width:350},
-    //         //         // {field:'uploadtime',title:'上传时间',algin:'center',width:600},
-    //         //         {field:'filesize',title:'文件大小',algin:'center',width:250}
-    //         //         // {field:'createtime',title:'上传状态',align:'center',toolbar:'#barDemo',fixed:'right'}
-    //         //     ]
-    //         // ],
-    //         "dom": '<"html5buttons"B>lTfgitp',
-    //         "buttons": [
-    //
-    //         ]
-    //
-    //     });
+    $(document).ready(function() {
+
+        $('.dataTables-example').DataTable({
+            language:{
+                "url":"/static/Bootstrap/js/datatables_language.json"
+            },
+            'length':6,
+            'processing': true,
+            'responsive': true,
+            'ajax': {
+                'url': '/ndpiQueryPage',
+                'type': 'POST',
+            },
+            'columns': [
+                {'data': null, 'orderable': false},
+                {'data': 'fileid', 'width':40},
+                {'data': 'filename'},
+                {'data': 'uploadtime'},
+                {'data': 'filesize'},
+                {'data': 'state'},
+            ],
+            'columnDefs': [{
+                targets: 0,
+                render: function (data, type, row, meta) {
+                    //每一行第一列都是复选框, 复选框要有name属性 方便查找
+                    //并且要加一个onclick 事件, 保证单选的时候也检查表头复选框状态.
+                    // return '<input type="checkbox" name="checklist" onclick="dd(this)" value="' + row.id + '" />'
+                    // return '<input type="radio" name="radio"  value="' + row.id + '" />'
+                    return '<div class="i-checks"><label> <input type="radio" value="' + row.id + '" name="radio"> <i></i> </label></div>'
+                }
+            }],
+            // cols: [
+            //     [
+            //
+            //         {title: '序号',field:'id',width: 60,align:'center'},
+            //         {field:'filename',title:'文件名称',algin:'center',width:350},
+            //         // {field:'uploadtime',title:'上传时间',algin:'center',width:600},
+            //         {field:'filesize',title:'文件大小',algin:'center',width:250}
+            //         // {field:'createtime',title:'上传状态',align:'center',toolbar:'#barDemo',fixed:'right'}
+            //     ]
+            // ],
+            "dom": '<"html5buttons"B>lTfgitp',
+            "buttons": [
+
+            ]
+
+        });
 
 
 
@@ -516,32 +528,32 @@
         });
     }
 
-    // function start(){
-    //
-    //     $.ajax({
-    //         url:"/judge",
-    //         type: "POST",
-    //         dataType:"json",
-    //         success:function(result){
-    //             if(result==false){
-    //                 alert("请您先进行登录");
-    //                 window.location.href='/login';
-    //             }
-    //             else{
-    //                 window.onbeforeunload = function (e) {
-    //                     e = e || window.event;
-    //                     // 兼容IE8和Firefox 4之前的版本
-    //                     if (e) {
-    //                         e.returnValue = '关闭提示';
-    //                     }
-    //                     // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
-    //                     return '关闭提示';
-    //                 };
-    //                 detective();
-    //             }
-    //         }
-    //     });
-    // }
+    function start(){
+
+        $.ajax({
+            url:"/judge",
+            type: "POST",
+            dataType:"json",
+            success:function(result){
+                if(result==false){
+                    alert("请您先进行登录");
+                    window.location.href='/login';
+                }
+                else{
+                    window.onbeforeunload = function (e) {
+                        e = e || window.event;
+                        // 兼容IE8和Firefox 4之前的版本
+                        if (e) {
+                            e.returnValue = '关闭提示';
+                        }
+                        // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
+                        return '关闭提示';
+                    };
+                    detective();
+                }
+            }
+        });
+    }
 
     //检测
     function detective() {

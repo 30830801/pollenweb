@@ -1,6 +1,5 @@
 package com.pollen.pollenweb.controller.file;
 
-import com.pollen.pollenweb.configuration.ConfigProperties;
 import com.pollen.pollenweb.result.JsonResult;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -27,7 +27,7 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken token=(UsernamePasswordToken) authenticationToken;
         String username=token.getUsername();
         User queryUser=new User();
-        queryUser.setLogin_name(username);
+        queryUser.setLoginname(username);
         //根据用户名查询用户是否存在
         User user=userService.queryUserByLoginname(queryUser);
         if(user==null){

@@ -1,10 +1,13 @@
 package com.pollen.pollenweb.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pollen.pollenweb.exception.PwException;
 import com.pollen.pollenweb.result.ResponseEnum;
 import com.pollen.pollenweb.result.ResultMapUtil;
 import com.pollen.pollenweb.entity.User;
 import com.pollen.pollenweb.service.IUserService;
+import com.pollen.pollenweb.utils.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -15,8 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.Session;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -26,7 +32,7 @@ import java.util.Date;
  * @author yyq zz wcj
  * @since 2022-01-30
  */
-@Controller
+@RestController
 @Slf4j
 public class UserController {
     @Autowired
@@ -57,6 +63,7 @@ public class UserController {
         }catch(IncorrectCredentialsException e){
             throw new PwException(ResponseEnum.PASSWORD_ERROR);
         }
+//        Session session = (Session) subject.getSession();
         return ResultMapUtil.getHashMapLogin("验证成功","1");
 
     }
@@ -81,13 +88,6 @@ public class UserController {
 
     }
 
-    @RequestMapping(value="/detective")
-    public String detective(){return "/detective";}
-
-    @RequestMapping(value ="/login")
-    public String login(){
-        return "/login";
-    }
     /**
      * 退出登录
      */
@@ -96,6 +96,49 @@ public class UserController {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return "redirect:/login";
+    }
+
+    @RequestMapping(value = "/changePwd")
+    public Object changePwd(String username,String newPwd,String phonenumber){
+        if(username==null||newPwd==null){
+            //统一错误处理 下同
+            throw new PwException(ResponseEnum.USER_INFO_NULL);
+        }
+
+        User user = new User();
+        user.setLoginname(username);
+        User changeUser = userService.queryUserByLoginname(user);
+        changeUser.setLoginname(username);
+
+        changeUser.setCreated_time(new Date());
+        String md5password = MD5Util.SysMd5(changeUser.getLoginname(),newPwd);
+        changeUser.setPassword(md5password);
+        userService.editUser(changeUser);
+        return ResultMapUtil.getHashMapLogin("密码修改成功","1");
+    }
+
+    @RequestMapping(value = "/changeUserProfile")
+    public Object changeUserProfile(User user){
+        if(user == null){
+            //统一错误处理 下同
+            throw new PwException(ResponseEnum.USER_INFO_NULL);
+        }
+
+        User changeUser = userService.queryUserByLoginname(user);
+        changeUser.setUsername(user.getUsername());
+        changeUser.setEmail(user.getEmail());
+        changeUser.setPhonenumber(user.getPhonenumber());
+        changeUser.setCreated_time(new Date());
+
+        userService.editUser(changeUser);
+        return ResultMapUtil.getHashMapLogin("个人信息修改成功","1");
+    }
+
+    @RequestMapping("/loginUserJson")
+    private String currentLoginUser() throws JsonProcessingException {
+        User currentLoginUser = (User) SecurityUtils.getSubject().getPrincipal();
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(currentLoginUser);
     }
 
 }
